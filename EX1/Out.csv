@@ -1,0 +1,8 @@
+﻿# 
+# 01/12/2020 01:51:17
+# The parameters defined in the project are:
+# ,P2 - Point Mass Z Coordinate [m],P3 - Point4.FD2 [m],P4 - Equivalent Stress Maximum [Pa],P7 - User Defined Result Maximum,P8 - User Defined Result 2 Maximum,P9 - pout [Pa]
+# 
+# The following header line defines the name of the columns by reference to the parameters.
+Name,P2,P3,P4,P7,P8,P9
+DP 0,-0.5,0.5,956631.79259888432,0.026170799508690834,0.10268362611532211,282.713

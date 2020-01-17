@@ -1,0 +1,83 @@
+﻿# encoding: utf-8
+# Release 19.0
+SetScriptVersion(Version="19.0.136")
+system1 = GetSystem(Name="FEM")
+model1 = system1.GetContainer(ComponentName="Model")
+mesh1 = model1.AddMeshFile(
+    FilePath="C:/Data/beamt01.cdb",
+    ModelType="MechAPDLCDB")
+modelComponent1 = system1.GetComponent(Name="Model")
+modelComponent1.Update(AllDependencies=True)
+system2 = GetSystem(Name="Geom 1")
+geometryComponent1 = system2.GetComponent(Name="Geometry")
+geometryComponent1.Update(AllDependencies=True)
+system3 = GetSystem(Name="CFX 1")
+meshComponent1 = system3.GetComponent(Name="Mesh")
+meshComponent1.Update(AllDependencies=True)
+setupComponent1 = system3.GetComponent(Name="Setup")
+setupComponent1.Update(AllDependencies=True)
+solution1 = system3.GetContainer(ComponentName="Solution")
+solution1.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = On
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = C:\Data\Project files\Flutter\NX\test MD\Test4_19\MD4_19_files\dp0\CFX-1\CFX\Fluid Flow CFX.def
+      INITIAL VALUES SPECIFICATION:
+        INITIAL VALUES CONTROL:
+          Use Mesh From = Solver Input File
+        END
+        INITIAL VALUES: Initial Values 1
+          File Name = C:\Data\Project files\Flutter\NX\test MD\Test4_19\MD4_19_files\dp0\CFX-1\CFX\Fluid Flow CFX_004.res
+          Option = Results File
+        END
+      END
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 1
+        Start Method = Serial
+      END
+    END
+  END
+END
+""")
+solutionComponent1 = system3.GetComponent(Name="Solution")
+solutionComponent1.Update(Force=True)
+solution1.Exit()
+system4 = GetSystem(Name="SYS 1")
+modelComponent2 = system4.GetComponent(Name="Model")
+modelComponent2.Update(AllDependencies=True)
+setupComponent2 = system4.GetComponent(Name="Setup")
+setupComponent2.Update(AllDependencies=True)
+solutionComponent2 = system4.GetComponent(Name="Solution")
+solutionComponent2.Update(AllDependencies=True)

@@ -1,0 +1,28 @@
+﻿# encoding: utf-8
+# 2019 R2
+SetScriptVersion(Version="19.4.159")
+designPoint1 = Parameters.GetDesignPoint(Name="0")
+parameter1 = Parameters.GetParameter(Name="P2")
+designPoint1.SetParameterExpression(
+    Parameter=parameter1,
+    Expression="Var1 [m]")
+parameter2 = Parameters.GetParameter(Name="P3")
+designPoint1.SetParameterExpression(
+    Parameter=parameter2,
+    Expression="Var2 [m]")
+SetScriptVersion(Version="19.4.159")
+system1 = GetSystem(Name="Transient Structural (ANSYS)")
+setupComponent1 = system1.GetComponent(Name="Setup")
+setupComponent1.Update(AllDependencies=True)
+system2 = GetSystem(Name="SC")
+solutionComponent1 = system2.GetComponent(Name="Solution")
+solutionComponent1.Clean()
+setupComponent2 = system2.GetComponent(Name="Setup")
+setupComponent2.Refresh()
+solutionComponent1.Update(AllDependencies=True)
+resultsComponent1 = system1.GetComponent(Name="Results")
+resultsComponent1.Update(AllDependencies=True)
+system3 = GetSystem(Name="CFX 1")
+resultsComponent2 = system3.GetComponent(Name="Results")
+resultsComponent2.Update(AllDependencies=True)
+Parameters.ExportAllDesignPointsData(FilePath="D:/Data/Research/Repos/RAF-TDMDO/EX1/Out.csv")
